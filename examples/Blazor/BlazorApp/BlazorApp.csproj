@@ -13,9 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="OpenAI.Net">
-      <HintPath>..\..\..\src\OpenAI.Net\bin\Debug\net6.0\OpenAI.Net.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\..\..\src\OpenAI.Net\OpenAI.Net.csproj" />
   </ItemGroup>
 
 </Project>
