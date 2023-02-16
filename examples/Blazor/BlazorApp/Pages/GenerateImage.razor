@@ -1,0 +1,79 @@
+﻿@page "/generateimage"
+
+<PageTitle>Generate Image</PageTitle>
+
+@using BlazorApp.Data
+@using OpenAI.Net
+@inject IOpenAIService _openAIService
+
+<h3><b>Generate Images using OpenAI</b></h3>
+
+
+<div>&nbsp;</div>
+<EditForm Model="@createImageModel" OnValidSubmit="@CreateImage">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group">
+        <label for="usr"><b>Search Text:</b></label>
+        <InputText class="form-control" id="name" @bind-Value="createImageModel.SearchText" />
+    </div>
+    <div>&nbsp;</div>
+    <div class="form-group">
+        <label for="usr"><b>Number of result:</b></label>
+        <InputNumber id="noOfResults" class="form-control" @bind-Value="createImageModel.NoOfResults" />
+    </div>
+    @*<label>Search Text</label>&nbsp;&nbsp; <InputText id="name" @bind-Value="createImageModel.SearchText" /><br /><br />
+    <label>Number of result</label>&nbsp;&nbsp; <InputNumber id="noOfResults" @bind-Value="createImageModel.NoOfResults" /><br /><br />*@
+    
+    <div>&nbsp;</div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-success">Search</button>
+    </div>
+</EditForm>
+<div>&nbsp;</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Results</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var result in Results)
+        {
+            <tr>
+                <td>
+                    <img src="@result" width="300" height="300"/>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@code {
+    private CreateImage createImageModel = new()
+        {
+            
+            NoOfResults = 1,
+            SearchText = "a otter hugging a cat with a sunset background framed with a heart"
+        };
+    private int loopCount = 0;
+    public List<string> Results { get; set; } = new List<string>();
+
+    private async Task CreateImage()
+    {
+
+       
+        var response = await _openAIService.Images.Generate(createImageModel.SearchText, o =>
+        {
+            o.N = createImageModel.NoOfResults;
+        });
+        if (response.IsSuccess)
+        {
+            Results = response.Result.Data.Select(i => i.Url).ToList();
+            StateHasChanged();
+        }
+        
+    }
+
+}

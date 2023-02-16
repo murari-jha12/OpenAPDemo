@@ -1,0 +1,81 @@
+﻿@page "/search"
+
+<PageTitle>Search</PageTitle>
+
+@using BlazorApp.Data
+@using OpenAI.Net
+@inject IOpenAIService OpenAIService
+
+<h3><b>Search using OpenAI</b></h3>
+
+<div>&nbsp;</div>
+<EditForm Model="@searchModel" OnValidSubmit="@SearchText">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group">
+        <label for="usr"><b>Search Text:</b></label>
+        <InputText class="form-control" id="name" @bind-Value="searchModel.SearchText" />
+    </div>
+    <div>&nbsp;</div>
+    <div class="form-group">
+        <label for="usr"><b>Number of result:</b></label>
+        <InputNumber id="noOfResults" class="form-control" @bind-Value="searchModel.NoOfResults" />
+    </div>
+    <div>&nbsp;</div>
+    <div class="form-group">
+        <label for="usr"><b>Context length:</b></label>
+         <InputNumber id="maxTokens" class="form-control" @bind-Value="searchModel.MaxTokens" />
+    </div>
+    <div>&nbsp;</div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-success">Search</button>
+    </div>
+   
+</EditForm>
+<div>&nbsp;</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Results</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var result in results)
+        {
+            <tr>
+                <td>@result</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@code {
+    private SearchModel searchModel = new()
+    {
+        MaxTokens =200,
+        NoOfResults =2,
+        SearchText = "About Kellton"
+    };
+    private int loopCount = 0;
+    private string[] results = new string[0];
+
+    private async Task SearchText()
+    {
+        results = new string[searchModel.NoOfResults];
+
+        await foreach (var result in OpenAIService.TextCompletion.GetStream(searchModel.SearchText, o =>
+        {
+            o.N = searchModel.NoOfResults;
+            o.MaxTokens = searchModel.MaxTokens;
+        }))
+        {
+            var index = result.Result.Choices[0].Index;
+            results[index] += result.Result.Choices[0].Text;
+
+            loopCount++;
+            StateHasChanged();
+        }
+    }
+   
+}
