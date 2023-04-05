@@ -5,7 +5,7 @@
         //This function checks the age of a passenger and returns a corresponding string value indicating whether they are an adult or infant
         public string CheckPassenger(int age)
         {
-            //Check if age is greater than 2
+            // Check if age is greater than 2
             if (age > 2)
             {
                 //If greater than 2, return the string "Adult"

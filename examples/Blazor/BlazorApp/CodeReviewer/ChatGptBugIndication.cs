@@ -15,7 +15,7 @@
 
         }
 
-        //The return type of this function should be a string, not a boolean, so this line should be changed to: return "Infant";
+        //The return  type of this function should be a string, not a boolean, so this line should be changed to: return "Infant";
 
 
 
