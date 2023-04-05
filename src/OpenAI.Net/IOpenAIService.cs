@@ -6,7 +6,7 @@ namespace OpenAI.Net
     {
 
         /// <summary>
-        /// <inheritdoc  test cref="IModelsService"/>
+        /// <inheritdoc  test  cref="IModelsService"/>
         /// </summary>
         public IModelsService Models { get; }
 
