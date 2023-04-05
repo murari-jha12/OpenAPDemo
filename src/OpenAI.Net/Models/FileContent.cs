@@ -8,7 +8,7 @@ namespace OpenAI.Net.Models
         {
             if(fileContent == null || fileContent.Length == 0)
             {
-                throw new ArgumentException("FileContent is required");
+                throw new ArgumentException("FileContent is  required");
             }
 
             if (string.IsNullOrWhiteSpace(fileName))
