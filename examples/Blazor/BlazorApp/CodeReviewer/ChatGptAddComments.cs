@@ -2,7 +2,7 @@
 {
     public class ChatGptAddComments
     {
-        //This function checks the age of a passenger and returns a corresponding string value indicating whether they are an adult or infant
+        // This function checks the age of a passenger and returns a corresponding string value indicating whether they are an adult or infant
         public string CheckPassenger(int age)
         {
             //Check if age is greater than 2
